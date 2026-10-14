@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronRightSolidIcon } from '@/components/icons/Icons';
 import { heroSlides } from '@/data/hero';
 import { site } from '@/data/site';
 import { cn } from '@/lib/utils';
@@ -14,14 +15,6 @@ const AUTOPLAY_MS = 5000;
 
 const focusRing =
   'outline-none focus-visible:outline-2 focus-visible:outline-offset-2';
-
-function ChevronRightSolid({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 320 512" fill="currentColor" aria-hidden className={className}>
-      <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z" />
-    </svg>
-  );
-}
 
 export function Hero() {
   const [index, setIndex] = useState(0);
@@ -72,7 +65,7 @@ export function Hero() {
             )}
           >
             Learn more
-            <ChevronRightSolid className="h-4 w-2.5" />
+            <ChevronRightSolidIcon className="h-4 w-2.5" />
           </Link>
         </div>
 

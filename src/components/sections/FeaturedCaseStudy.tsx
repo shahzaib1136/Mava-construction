@@ -1,43 +1,48 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Container } from "@/components/ui/Container";
 import { caseStudies } from "@/data/caseStudies";
+
+const focusRing =
+  "outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
 export function FeaturedCaseStudy() {
   const featured = caseStudies[0];
+  const href = `/case-studies/${featured.slug}`;
 
   return (
-    <section className="bg-[#f6f7f9] py-16">
-      <Container>
-        <article className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2">
-          <div className="relative h-[280px] w-full overflow-hidden sm:h-[380px]">
+    <section className="py-10">
+      <div className="boxed p-2.5">
+        <article className="flex flex-col md:flex-row">
+          <Link
+            href={href}
+            tabIndex={-1}
+            className="relative block aspect-2/1 w-full shrink-0 overflow-hidden md:mr-5 md:aspect-10/7 md:w-[53%]"
+          >
             <Image
               src={featured.image}
-              alt={featured.title}
+              alt=""
               fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
+              sizes="(min-width: 1025px) 657px, (min-width: 768px) 53vw, 100vw"
               className="object-cover"
             />
-          </div>
-          <div className="flex flex-col px-0 lg:px-10">
-            <Link href={`/case-studies/${featured.slug}`} className="group">
-              <span className="block text-[1.4rem] font-normal uppercase tracking-wide text-muted">
-                Case Studies
-              </span>
-              <h2 className="mt-2 text-[2.4rem] leading-tight text-navy group-hover:text-accent">
+          </Link>
+          <div className="mt-5 min-w-0 md:mt-0 md:flex-1">
+            <h3 className="text-lg leading-6.75 font-semibold text-navy">
+              <Link href={href} className={focusRing}>
                 {featured.title}
-              </h2>
-            </Link>
-            <p className="mt-4 text-[1.6rem] leading-7 text-body">{featured.summary}</p>
+              </Link>
+            </h3>
+            <p className="mb-2.5 text-sm leading-5.25 text-[#777]">{featured.excerpt}</p>
             <Link
-              href={`/case-studies/${featured.slug}`}
-              className="mt-6 inline-flex w-fit items-center bg-brand px-6 py-3 text-[1.5rem] text-white hover:bg-brand-hover"
+              href={href}
+              aria-label={`Read more about ${featured.title}`}
+              className={`text-xs leading-4.5 font-medium text-navy ${focusRing}`}
             >
               Learn more
             </Link>
           </div>
         </article>
-      </Container>
+      </div>
     </section>
   );
 }

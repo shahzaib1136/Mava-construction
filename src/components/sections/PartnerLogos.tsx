@@ -1,62 +1,37 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Container } from "@/components/ui/Container";
+import { Carousel } from "@/components/ui/Carousel";
 import { partnerLogos } from "@/data/partners";
 
-const AUTOPLAY_MS = 4000;
-const PER_PAGE = 5;
-const pageCount = Math.ceil(partnerLogos.length / PER_PAGE);
-
 export function PartnerLogos() {
-  const [page, setPage] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setPage((p) => (p + 1) % pageCount);
-    }, AUTOPLAY_MS);
-    return () => clearInterval(id);
-  }, []);
-
-  const current = partnerLogos.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
-
   return (
-    <section className="bg-brand bg-[url('/images/icons/background-tile.svg')] bg-cover py-10">
-      <Container>
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            aria-label="Previous partners"
-            onClick={() => setPage((p) => (p - 1 + pageCount) % pageCount)}
-            className="shrink-0 text-white/70 hover:text-white"
-          >
-            <ChevronLeft className="size-6" />
-          </button>
-          <div className="grid flex-1 grid-cols-2 items-center gap-8 sm:grid-cols-3 lg:grid-cols-5">
-            {current.map((src) => (
-              <div key={src} className="relative h-10 w-full">
-                <Image
-                  src={src}
-                  alt="ZNB Construction partner"
-                  fill
-                  sizes="200px"
-                  className="object-contain opacity-90"
-                />
-              </div>
-            ))}
-          </div>
-          <button
-            type="button"
-            aria-label="Next partners"
-            onClick={() => setPage((p) => (p + 1) % pageCount)}
-            className="shrink-0 text-white/70 hover:text-white"
-          >
-            <ChevronRight className="size-6" />
-          </button>
-        </div>
-      </Container>
+    <section className="relative my-15 bg-brand py-10">
+      <div
+        className="pointer-events-none absolute inset-0 bg-[url('/images/icons/background-tile.svg')] bg-repeat opacity-80 mix-blend-overlay"
+        aria-hidden
+      />
+      <div className="boxed relative p-2.5">
+        <Carousel
+          label="Our partners"
+          perViewClassName="[--n:2] min-[1025px]:[--n:5]"
+          showDots
+          viewportClassName="mx-7.5 pb-7.5"
+          arrowClassName="top-[calc((100%-30px)/2)]"
+          arrowIconClassName="size-6.25"
+          dotsClassName="bottom-1.5"
+          items={partnerLogos.map((src) => (
+            <div key={src} className="text-center leading-6">
+              <Image
+                src={src}
+                alt="ZNB Construction partner"
+                width={300}
+                height={120}
+                sizes="(min-width: 1025px) 236px, (min-width: 768px) 300px, 155px"
+                className="inline h-auto max-w-full align-baseline"
+              />
+            </div>
+          ))}
+        />
+      </div>
     </section>
   );
 }

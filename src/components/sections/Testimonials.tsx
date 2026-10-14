@@ -1,73 +1,30 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Container } from "@/components/ui/Container";
+import { Carousel } from "@/components/ui/Carousel";
 import { testimonials } from "@/data/testimonials";
 
-const AUTOPLAY_MS = 7000;
-const PER_PAGE = 2;
-const pageCount = Math.ceil(testimonials.length / PER_PAGE);
-
 export function Testimonials() {
-  const [page, setPage] = useState(0);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setPage((p) => (p + 1) % pageCount);
-    }, AUTOPLAY_MS);
-    return () => clearInterval(id);
-  }, []);
-
-  const current = testimonials.slice(page * PER_PAGE, page * PER_PAGE + PER_PAGE);
-
   return (
-    <section className="py-16">
-      <Container>
-        <div className="flex items-center gap-6">
-          <button
-            type="button"
-            aria-label="Previous testimonials"
-            onClick={() => setPage((p) => (p - 1 + pageCount) % pageCount)}
-            className="hidden shrink-0 text-muted hover:text-brand sm:block"
-          >
-            <ChevronLeft className="size-6" />
-          </button>
-
-          <div className="grid flex-1 grid-cols-1 gap-10 sm:grid-cols-2">
-            {current.map((t) => (
-              <div key={t.name} className="text-center">
-                <p className="text-[1.6rem] leading-8 text-body">{t.quote}</p>
-                <p className="mt-5 text-[1.5rem] font-bold text-brand">{t.name}</p>
-                <p className="text-[1.3rem] text-muted">{t.role}</p>
-              </div>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            aria-label="Next testimonials"
-            onClick={() => setPage((p) => (p + 1) % pageCount)}
-            className="hidden shrink-0 text-muted hover:text-brand sm:block"
-          >
-            <ChevronRight className="size-6" />
-          </button>
-        </div>
-
-        <div className="mt-8 flex justify-center gap-2">
-          {Array.from({ length: pageCount }).map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              aria-label={`Go to testimonials page ${i + 1}`}
-              onClick={() => setPage(i)}
-              className={`size-2.5 rounded-full transition-colors ${
-                i === page ? "bg-brand" : "bg-border"
-              }`}
-            />
+    <section className="mt-2.5 mb-15 pt-2.5">
+      <div className="boxed p-2.5">
+        <Carousel
+          label="Testimonials"
+          perViewClassName="[--n:1] min-[1025px]:[--n:2]"
+          gap={10}
+          viewportClassName="mx-auto w-[95%]"
+          arrowClassName="top-1/2"
+          prevClassName="left-2.5"
+          nextClassName="right-2.5"
+          arrowIconClassName="size-5"
+          items={testimonials.map((t) => (
+            <figure key={t.name} className="h-full px-5 pt-11.25 pb-5 text-center">
+              <blockquote className="leading-6">{t.quote}</blockquote>
+              <figcaption className="mt-6.25 leading-6">
+                <span className="block font-semibold text-brand">{t.name}</span>
+                <span className="block">{t.role}</span>
+              </figcaption>
+            </figure>
           ))}
-        </div>
-      </Container>
+        />
+      </div>
     </section>
   );
 }

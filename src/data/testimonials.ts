@@ -27,6 +27,6 @@ export const testimonials: Testimonial[] = [
     quote:
       "We are a frequent user of ZNB due to the high quality service which is always received. We find the quality of service from obtaining prices at tender stage through to the installation of concrete highly professional, efficient and cost effective. They can always be relied upon.",
     name: "Chibueze Ezetendu",
-    role: "Commercial Support (Horgan Consulting Ltd)",
+    role: "Commercial Support (Horgan Consulting ltd)",
   },
 ];

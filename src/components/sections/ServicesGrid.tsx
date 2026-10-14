@@ -1,40 +1,44 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
-import { Container } from "@/components/ui/Container";
+import { ChevronRightSolidIcon } from "@/components/icons/Icons";
 import { services } from "@/data/services";
+
+const focusRing =
+  "outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
 
 export function ServicesGrid() {
   return (
-    <section className="py-16">
-      <Container>
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {services.map((service) => (
-            <div key={service.slug} className="flex flex-col">
-              <div className="relative h-[180px] w-full overflow-hidden">
-                <Image
-                  src={service.cardImage}
-                  alt={service.title}
-                  fill
-                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
-              <h2 className="mt-5 text-[1.6rem] font-bold text-navy">{service.cardTitle}</h2>
-              <p className="mt-2 flex-1 text-[1.4rem] leading-6 text-body">
-                {service.cardSummary}
-              </p>
+    <section className="my-15">
+      <div className="boxed flex flex-wrap">
+        {services.map((service) => {
+          const href = `/services/${service.slug}`;
+          return (
+            <div key={service.slug} className="w-full p-2.5 md:w-1/4">
+              <Image
+                src={service.cardImage}
+                alt={service.title}
+                width={560}
+                height={450}
+                sizes="(min-width: 1025px) 295px, (min-width: 768px) 25vw, 100vw"
+                className="h-auto w-full"
+              />
+              <h2 className="mt-5 text-[32px] leading-8 font-semibold text-navy">
+                <Link href={href} className={focusRing}>
+                  {service.cardTitle}
+                </Link>
+              </h2>
+              <p className="mt-7.5 leading-6">{service.cardSummary}</p>
               <Link
-                href={`/services/${service.slug}`}
-                className="mt-4 inline-flex items-center gap-1 text-[1.4rem] font-medium text-brand hover:text-accent"
+                href={href}
+                className={`mt-7.5 inline-flex items-center gap-1.25 leading-6 font-medium tracking-[0.2px] text-brand transition-colors duration-500 hover:text-accent ${focusRing}`}
               >
                 View Service
-                <ArrowRight className="size-4" />
+                <ChevronRightSolidIcon className="h-4 w-2.5" />
               </Link>
             </div>
-          ))}
-        </div>
-      </Container>
+          );
+        })}
+      </div>
     </section>
   );
 }

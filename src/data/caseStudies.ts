@@ -7,6 +7,8 @@ export type CaseStudy = {
   duration: string;
   image: string;
   summary: string;
+  // Short teaser shown on listing cards (matches the reference's post excerpt).
+  excerpt: string;
   description: string[];
   features: string[];
 };
@@ -20,6 +22,8 @@ export const caseStudies: CaseStudy[] = [
     value: "Approx £100 million",
     duration: "110 weeks",
     image: "/images/case-studies/x1-media-city.jpg",
+    excerpt:
+      "X1 Media City, Towers 1 & 2 Location: Salford Quays Client: Vermont Value: Approx £100 million Duration: 110 weeks Project Description ZNB carried out the",
     summary:
       "ZNB carried out the concrete placing and finishing works for a single storey basement and two 27 storey residential towers within the heart of Media City in Salford Quays.",
     description: [
@@ -44,6 +48,8 @@ export const caseStudies: CaseStudy[] = [
     value: "£35 million",
     duration: "30 months",
     image: "/images/case-studies/mecd.jpg",
+    excerpt:
+      "MECD, Booth Street, Manchester Location: Manchester Client: Expanded Value: £35 million Duration: 30 months Project Description Awarded by repeat client Expanded (Laing O’Rourke), ZNB have",
     summary:
       "Awarded by repeat client Expanded (Laing O'Rourke), ZNB have been appointed for the concrete installation works to one of the single largest construction projects undertaken by any higher education institution in the UK.",
     description: [
