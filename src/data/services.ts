@@ -133,9 +133,10 @@ export const services: Service[] = [
       ],
       [
         "/images/services/site-operative-2.jpg",
+        // The reference copy (pasted from Word) starts each paragraph with a non-breaking space.
         [
-          p("Our hiring practices mean that we attract the best and brightest. In our experience: working smarter, not necessarily harder is what delivers the best results in a timely manner for our clients. We insist that our team of onsite operatives are the very best in the business."),
-          p("For more information on our team, there various expertise and training standards; please contact ZNB today."),
+          p("\u00a0Our hiring practices mean that we attract the best and brightest. In our experience: working smarter, not necessarily harder is what delivers the best results in a timely manner for our clients. We insist that our team of onsite operatives are the very best in the business."),
+          p("\u00a0For more information on our team, there various expertise and training standards; please contact ZNB today."),
         ],
       ],
     ],
