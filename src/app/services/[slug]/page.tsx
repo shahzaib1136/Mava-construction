@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/sections/PageHeader";
-import { Container } from "@/components/ui/Container";
-import { services, getServiceBySlug } from "@/data/services";
-import { site } from "@/data/site";
+import {
+  services,
+  getServiceBySlug,
+  type ServiceBlock,
+  type ServiceColumn,
+  type ServiceRow,
+} from "@/data/services";
+import { cn } from "@/lib/utils";
 
 export function generateStaticParams() {
   return services.map((service) => ({ slug: service.slug }));
@@ -22,6 +26,74 @@ export async function generateMetadata({
   return { title: service.title, description: service.cardSummary };
 }
 
+// Matches the reference: text beside an image is vertically centred, images sit at
+// the top unless flagged, and text-only rows are top-aligned.
+function columnAlign(column: ServiceColumn, row: ServiceRow) {
+  if (Array.isArray(column)) return row.some((c) => !Array.isArray(c)) ? "justify-center" : "";
+  return typeof column !== "string" && column.centered ? "justify-center" : "";
+}
+
+// Groups consecutive paragraphs so they share one 10px-margin paragraph stack,
+// while headings and plain text runs stand alone (20px apart).
+function groupBlocks(blocks: ServiceBlock[]) {
+  const groups: ServiceBlock[][] = [];
+  for (const block of blocks) {
+    const last = groups[groups.length - 1];
+    if (block.type === "p" && last?.[0].type === "p") last.push(block);
+    else groups.push([block]);
+  }
+  return groups;
+}
+
+function Column({ column, title, priority }: { column: ServiceColumn; title: string; priority: boolean }) {
+  if (!Array.isArray(column)) {
+    return (
+      <Image
+        src={typeof column === "string" ? column : column.src}
+        alt={title}
+        width={1000}
+        height={800}
+        sizes="(min-width: 1025px) 560px, (min-width: 768px) 50vw, 100vw"
+        className="h-auto w-full"
+        priority={priority}
+      />
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-5">
+      {groupBlocks(column).map((group, i) => {
+        const [first] = group;
+        if (first.type === "h2")
+          return (
+            <h2 key={i} className="text-[32px] leading-8 font-semibold text-navy">
+              {first.text}
+            </h2>
+          );
+        if (first.type === "h3")
+          return (
+            <h3 key={i} className="text-2xl leading-6 font-semibold text-navy">
+              {first.text}
+            </h3>
+          );
+        if (first.type === "text")
+          return (
+            <p key={i} className="leading-6">
+              {first.text}
+            </p>
+          );
+        return (
+          <div key={i} className="leading-6 [&>p]:my-2.5">
+            {group.map((block, j) => (
+              <p key={j}>{block.text}</p>
+            ))}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default async function ServiceDetailPage({
   params,
 }: {
@@ -31,76 +103,22 @@ export default async function ServiceDetailPage({
   const service = getServiceBySlug(slug);
   if (!service) notFound();
 
-  const otherServices = services.filter((s) => s.slug !== service.slug);
-
   return (
     <>
-      <PageHeader title={service.title} />
-      <section className="py-16">
-        <Container>
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-[2fr_1fr]">
-            <div>
-              <div className="relative h-[260px] w-full overflow-hidden sm:h-[380px]">
-                <Image
-                  src={service.heroImage}
-                  alt={service.title}
-                  fill
-                  sizes="(min-width: 1024px) 66vw, 100vw"
-                  className="object-cover"
-                  priority
-                />
-              </div>
-
-              {service.intro.length > 0 && (
-                <div className="mt-8 flex flex-col gap-4 text-[1.6rem] leading-8 text-body">
-                  {service.intro.map((paragraph, i) => (
-                    <p key={i}>{paragraph}</p>
-                  ))}
-                </div>
-              )}
-
-              {service.sections.map((section) => (
-                <div key={section.heading} className="mt-10">
-                  <h2 className="text-[2rem] font-bold text-navy">{section.heading}</h2>
-                  <div className="mt-4 flex flex-col gap-4 text-[1.6rem] leading-8 text-body">
-                    {section.body.map((paragraph, i) => (
-                      <p key={i}>{paragraph}</p>
-                    ))}
-                  </div>
+      <PageHeader title={service.title} crumbs={[{ label: "Services", href: "/services" }]} />
+      <div className="py-12.5">
+        {service.rows.map((row, i) => (
+          <section key={i} className="boxed my-10 px-2.5">
+            <div className="flex flex-col md:flex-row">
+              {row.map((column, j) => (
+                <div key={j} className={cn("flex w-full flex-col p-7.5 md:w-1/2", columnAlign(column, row))}>
+                  <Column column={column} title={service.title} priority={i === 0} />
                 </div>
               ))}
-
-              <div className="mt-10 flex flex-wrap gap-4">
-                <a
-                  href={site.phoneHref}
-                  className="inline-flex items-center bg-brand px-6 py-3 text-[1.5rem] text-white hover:bg-brand-hover"
-                >
-                  Call us on {site.phone}
-                </a>
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center border border-brand px-6 py-3 text-[1.5rem] text-brand hover:bg-brand hover:text-white"
-                >
-                  Contact us today
-                </Link>
-              </div>
             </div>
-
-            <aside className="flex flex-col gap-4">
-              <h3 className="text-[1.6rem] font-bold text-navy">Other Services</h3>
-              {otherServices.map((other) => (
-                <Link
-                  key={other.slug}
-                  href={`/services/${other.slug}`}
-                  className="border border-border p-4 text-[1.5rem] text-navy hover:border-brand hover:text-brand"
-                >
-                  {other.title}
-                </Link>
-              ))}
-            </aside>
-          </div>
-        </Container>
-      </section>
+          </section>
+        ))}
+      </div>
     </>
   );
 }

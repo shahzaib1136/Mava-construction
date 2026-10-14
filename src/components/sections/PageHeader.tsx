@@ -1,26 +1,35 @@
+import { Fragment } from "react";
 import Link from "next/link";
-import { Container } from "@/components/ui/Container";
 
-export function PageHeader({ title }: { title: string }) {
+type Crumb = { label: string; href: string };
+
+// Title band used at the top of inner pages: heading plus breadcrumb trail
+// (Home / ...crumbs / current page) over the textured background.
+export function PageHeader({ title, crumbs = [] }: { title: string; crumbs?: Crumb[] }) {
+  const trail: Crumb[] = [{ label: "Home", href: "/" }, ...crumbs];
+
   return (
-    <div className="relative overflow-hidden border-b border-border bg-white py-16">
-      <div
-        className="pointer-events-none absolute inset-0 bg-cover bg-right opacity-40"
-        style={{
-          backgroundImage: "url('/images/hero/hero-bg-texture.png')",
-          maskImage: "linear-gradient(to left, black, transparent 60%)",
-          WebkitMaskImage: "linear-gradient(to left, black, transparent 60%)",
-        }}
-      />
-      <Container className="relative">
-        <h1 className="text-[3.2rem] font-bold text-navy">{title}</h1>
-        <p className="mt-2 text-[1.4rem] text-muted">
-          <Link href="/" className="hover:text-brand">
-            Home
-          </Link>{" "}
-          / {title}
-        </p>
-      </Container>
-    </div>
+    <section className="border-b border-border bg-[url('/images/hero/hero-bg-texture.png')] bg-center pt-15 pb-10">
+      <div className="boxed flex min-h-33.75 flex-col md:flex-row md:items-center">
+        <div className="w-full p-2.5 md:w-[42.68%]">
+          <h1 className="text-[40px] leading-10 font-semibold text-navy">{title}</h1>
+          <nav aria-label="Breadcrumb" className="mt-7.5 text-[13.6px] leading-[20.4px]">
+            {trail.map((crumb) => (
+              <Fragment key={crumb.href}>
+                <Link
+                  href={crumb.href}
+                  className="text-navy outline-none hover:text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  {crumb.label}
+                </Link>
+                {" / "}
+              </Fragment>
+            ))}
+            <span aria-current="page">{title}</span>
+          </nav>
+        </div>
+        <div className="h-0.5 md:hidden" aria-hidden />
+      </div>
+    </section>
   );
 }
