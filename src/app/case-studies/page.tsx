@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { PageHeader } from "@/components/sections/PageHeader";
-import { Container } from "@/components/ui/Container";
 import { caseStudies } from "@/data/caseStudies";
 
 export const metadata: Metadata = {
@@ -10,41 +9,50 @@ export const metadata: Metadata = {
   description: "A selection of major concrete installation projects delivered by ZNB Construction.",
 };
 
+const focusRing =
+  "outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand";
+
 export default function CaseStudiesPage() {
   return (
     <>
       <PageHeader title="Case Studies" />
-      <section className="py-16">
-        <Container>
-          <div className="flex flex-col gap-12">
-            {caseStudies.map((study) => (
+      <section className="boxed my-20 p-2.5">
+        <div className="grid grid-cols-1 gap-x-7.5 gap-y-8.75 md:max-[1025px]:grid-cols-2 min-[1025px]:grid-cols-3">
+          {caseStudies.map((study) => {
+            const href = `/case-studies/${study.slug}`;
+            return (
               <article
                 key={study.slug}
-                className="grid grid-cols-1 items-center gap-8 border-b border-border pb-12 last:border-0 lg:grid-cols-2"
+                className="flex flex-col overflow-hidden rounded-[3px] bg-white shadow-[0_0_10px_0_rgba(0,0,0,0.15)]"
               >
-                <div className="relative h-[260px] w-full overflow-hidden sm:h-[320px]">
+                <Link href={href} tabIndex={-1} className="relative mb-5 block pb-[50%] md:pb-[66%]">
                   <Image
                     src={study.image}
-                    alt={study.title}
+                    alt=""
                     fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    sizes="(min-width: 1025px) 393px, (min-width: 768px) 50vw, 100vw"
                     className="object-cover"
                   />
-                </div>
-                <div>
-                  <h2 className="text-[2.2rem] font-bold text-navy">{study.title}</h2>
-                  <p className="mt-3 text-[1.5rem] leading-7 text-body">{study.summary}</p>
+                </Link>
+                <div className="mt-5 flex grow flex-col px-7.5">
+                  <h3 className="mb-6.25 text-[21px] leading-[31.5px] font-semibold text-navy">
+                    <Link href={href} className={focusRing}>
+                      {study.title}
+                    </Link>
+                  </h3>
+                  <p className="mb-6.25 text-sm leading-5.25 text-[#777]">{study.excerpt}</p>
                   <Link
-                    href={`/case-studies/${study.slug}`}
-                    className="mt-5 inline-flex items-center bg-brand px-6 py-3 text-[1.5rem] text-white hover:bg-brand-hover"
+                    href={href}
+                    aria-label={`Read more about ${study.title}`}
+                    className={`mt-1 mb-5 self-start text-xs leading-4.5 font-medium text-navy uppercase ${focusRing}`}
                   >
                     Read More »
                   </Link>
                 </div>
               </article>
-            ))}
-          </div>
-        </Container>
+            );
+          })}
+        </div>
       </section>
     </>
   );

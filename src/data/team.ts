@@ -7,11 +7,11 @@ export type TeamMember = {
 
 export const team: TeamMember[] = [
   {
-    name: 'Surinder Pal Singh ("Lucky")',
+    name: "Surinder Pal Singh (Lucky)",
     role: "Project Manager",
     image: "/images/team/surinder-pal-singh.jpg",
     bio:
-      'Surinder Pal Singh, AKA "Lucky" is the Project Manager of ZNB Construction Ltd. He has been working in the construction Industry for the past 15 years. Starting out as a basic concrete labourer, he quickly became a site supervisor. Owing to all his experience and hard work, he was given an opportunity to handle a major project in Manchester. While doing so he came up with the idea of opening his own company. Surinder and his wife set up ZNB Construction Ltd in 2013 and have been managing it ever since. Today they successfully handle many projects nationwide.',
+      "Surinder Pal Singh, AKA“Lucky” is the Project Manager of ZNB Construction Ltd. He has been working in the construction Industry for the past 15 years. Starting out as a basic concrete labourer, he quickly became a site supervisor. Owing to all his experience and hard work, he was given an opportunity to handle a major project in Manchester. While doing so he came up with the idea of opening his own company. Surinder and his wife set up ZNB Construction Ltd in 2013 and have been managing it ever since. Today they successfully handle many projects nationwide.",
   },
   {
     name: "Zobe Naheed",

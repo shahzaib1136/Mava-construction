@@ -2,6 +2,10 @@
 
 import { useId, useState, type FormEvent } from "react";
 
+const labelClass = "block leading-6";
+const fieldClass =
+  "block w-full rounded-[3px] border border-[#69727d] bg-white text-[15px] leading-5.25 text-[#1f2124] outline-none focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand";
+
 export function JobApplicationForm({ jobTitle }: { jobTitle: string }) {
   const formId = useId();
   const [submitted, setSubmitted] = useState(false);
@@ -26,16 +30,16 @@ export function JobApplicationForm({ jobTitle }: { jobTitle: string }) {
 
   if (submitted) {
     return (
-      <p className="text-[1.5rem] text-navy">
+      <p className="leading-6 text-navy">
         Thanks for applying for {jobTitle}. We&rsquo;ll be in touch soon.
       </p>
     );
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-xl">
+    <form onSubmit={handleSubmit} aria-label={`Apply for ${jobTitle}`} className="flex flex-col gap-5">
       <div>
-        <label htmlFor={`${formId}-name`} className="mb-1 block text-[1.4rem] text-navy">
+        <label htmlFor={`${formId}-name`} className={labelClass}>
           Name
         </label>
         <input
@@ -43,11 +47,12 @@ export function JobApplicationForm({ jobTitle }: { jobTitle: string }) {
           name="name"
           type="text"
           required
-          className="w-full border border-border px-4 py-2.5 text-[1.5rem] outline-none focus:border-brand"
+          placeholder="Name"
+          className={`${fieldClass} px-5 py-2.5`}
         />
       </div>
       <div>
-        <label htmlFor={`${formId}-email`} className="mb-1 block text-[1.4rem] text-navy">
+        <label htmlFor={`${formId}-email`} className={labelClass}>
           Email
         </label>
         <input
@@ -55,22 +60,24 @@ export function JobApplicationForm({ jobTitle }: { jobTitle: string }) {
           name="email"
           type="email"
           required
-          className="w-full border border-border px-4 py-2.5 text-[1.5rem] outline-none focus:border-brand"
+          placeholder="Email"
+          className={`${fieldClass} px-5 py-2.5`}
         />
       </div>
       <div>
-        <label htmlFor={`${formId}-message`} className="mb-1 block text-[1.4rem] text-navy">
+        <label htmlFor={`${formId}-message`} className={labelClass}>
           Message
         </label>
         <textarea
           id={`${formId}-message`}
           name="message"
           rows={4}
-          className="w-full border border-border px-4 py-2.5 text-[1.5rem] outline-none focus:border-brand"
+          placeholder="Message"
+          className={`${fieldClass} px-3.5 py-1.25`}
         />
       </div>
       <div>
-        <label htmlFor={`${formId}-cv`} className="mb-1 block text-[1.4rem] text-navy">
+        <label htmlFor={`${formId}-cv`} className={labelClass}>
           Upload CV
         </label>
         <input
@@ -78,13 +85,13 @@ export function JobApplicationForm({ jobTitle }: { jobTitle: string }) {
           name="cv"
           type="file"
           accept=".pdf,.doc,.docx"
-          className="w-full border border-border px-4 py-2.5 text-[1.4rem] outline-none focus:border-brand"
+          className="block h-6 w-full leading-[18.4px] outline-none focus-visible:outline-2 focus-visible:outline-brand"
         />
       </div>
-      {error && <p className="text-[1.4rem] text-red-600">{error}</p>}
+      {error && <p className="leading-6 text-red-600">{error}</p>}
       <button
         type="submit"
-        className="w-fit bg-brand px-6 py-3 text-[1.5rem] text-white hover:bg-brand-hover transition-colors"
+        className="w-full rounded-[3px] bg-brand px-6 py-3 text-[15px] leading-6 font-medium tracking-[0.2px] text-white outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       >
         Send
       </button>

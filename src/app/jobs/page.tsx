@@ -1,6 +1,6 @@
+import { Fragment } from "react";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/sections/PageHeader";
-import { Container } from "@/components/ui/Container";
 import { jobs } from "@/data/jobs";
 import { JobApplicationForm } from "@/components/forms/JobApplicationForm";
 
@@ -9,50 +9,48 @@ export const metadata: Metadata = {
   description: "Current vacancies at ZNB Construction.",
 };
 
+// Renders lines separated by <br>, as the reference does for job details.
+function Lines({ items, prefix = "" }: { items: string[]; prefix?: string }) {
+  return items.map((item, i) => (
+    <Fragment key={item}>
+      {i > 0 && <br />}
+      {prefix}
+      {item}
+    </Fragment>
+  ));
+}
+
+function ListBlock({ heading, items }: { heading: string; items: string[] }) {
+  return (
+    <div>
+      <h4 className="text-lg leading-4.5 font-semibold text-navy">{heading}</h4>
+      <p className="mt-3 mb-2.5 leading-6">
+        <Lines items={items} prefix="– " />
+      </p>
+    </div>
+  );
+}
+
 export default function JobsPage() {
   return (
     <>
       <PageHeader title="Jobs" />
-      <section className="py-16">
-        <Container>
-          <div className="flex flex-col gap-16">
-            {jobs.map((job) => (
-              <article key={job.slug} className="border-b border-border pb-16 last:border-0">
-                <h2 className="text-[2.4rem] font-bold text-navy">{job.title}</h2>
-                <div className="mt-2 flex flex-wrap gap-4 text-[1.4rem] font-medium text-brand">
-                  <span>{job.type}</span>
-                  <span>{job.salary}</span>
-                  <span>{job.training}</span>
-                </div>
-
-                <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2">
-                  <div>
-                    <h3 className="text-[1.6rem] font-bold text-navy">Requirements</h3>
-                    <ul className="mt-3 flex flex-col gap-2 text-[1.5rem] leading-7 text-body">
-                      {job.requirements.map((item) => (
-                        <li key={item}>– {item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="text-[1.6rem] font-bold text-navy">Main Responsibilities</h3>
-                    <ul className="mt-3 flex flex-col gap-2 text-[1.5rem] leading-7 text-body">
-                      {job.responsibilities.map((item) => (
-                        <li key={item}>– {item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                <h3 className="mt-8 text-[1.6rem] font-bold text-navy">Apply below:</h3>
-                <div className="mt-4">
-                  <JobApplicationForm jobTitle={job.title} />
-                </div>
-              </article>
-            ))}
-          </div>
-        </Container>
-      </section>
+      <div className="boxed my-10 p-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          {jobs.map((job) => (
+            <article key={job.slug} className="flex flex-col gap-5 p-7.5">
+              <h2 className="text-[32px] leading-8 font-semibold text-navy">{job.title}</h2>
+              <p className="mb-2.5 leading-6">
+                <Lines items={[job.type, job.salary, job.training]} />
+              </p>
+              <ListBlock heading="Requirements" items={job.requirements} />
+              <ListBlock heading="Main Responsibilities:" items={job.responsibilities} />
+              <h3 className="text-2xl leading-6 font-semibold text-navy">Apply below:</h3>
+              <JobApplicationForm jobTitle={job.title} />
+            </article>
+          ))}
+        </div>
+      </div>
     </>
   );
 }

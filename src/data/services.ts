@@ -1,18 +1,4 @@
-// A content block within a service page column. Consecutive "p" blocks render as
-// one paragraph group; "text" is a single unwrapped run of copy.
-export type ServiceBlock = {
-  type: "h2" | "h3" | "p" | "text";
-  text: string;
-};
-
-// An image column sits at the top of its row unless marked as vertically centred.
-export type ServiceImage = { src: string; centered?: boolean };
-
-// A column is either an image (path, or path with alignment) or a stack of content blocks.
-export type ServiceColumn = string | ServiceImage | ServiceBlock[];
-
-// Service pages are a series of two-column rows, matching the reference layout.
-export type ServiceRow = [ServiceColumn, ServiceColumn];
+import { h2, h3, p, text, type ContentRow } from "./content";
 
 export type Service = {
   slug: string;
@@ -20,13 +6,8 @@ export type Service = {
   cardTitle: string;
   cardSummary: string;
   cardImage: string;
-  rows: ServiceRow[];
+  rows: ContentRow[];
 };
-
-const p = (text: string): ServiceBlock => ({ type: "p", text });
-const h2 = (text: string): ServiceBlock => ({ type: "h2", text });
-const h3 = (text: string): ServiceBlock => ({ type: "h3", text });
-const text = (value: string): ServiceBlock => ({ type: "text", text: value });
 
 export const services: Service[] = [
   {
